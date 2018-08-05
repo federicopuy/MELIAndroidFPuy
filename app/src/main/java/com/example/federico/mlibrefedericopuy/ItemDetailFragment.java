@@ -80,14 +80,9 @@ public class ItemDetailFragment extends Fragment {
                 appBarLayout.setTitle(product.getTitle());
             }
 
-            ImageView photoImageView = activity.findViewById(R.id.header);
-            String imagePath = product.getThumbnail();
-            Picasso.get().load(imagePath).into(photoImageView);
-
-
-
-
-
+//            ImageView photoImageView = activity.findViewById(R.id.header);
+//            String imagePath = product.getThumbnail();
+//            Picasso.get().load(imagePath).into(photoImageView);
 
 
         }
@@ -110,18 +105,18 @@ public class ItemDetailFragment extends Fragment {
 
             tvDescription.setText(description);
 
-
-            ArrayList<String> pictureURLS = new ArrayList<>();
-
-            for (Picture p:product.getPictureList()){
-
-                pictureURLS.add(p.getUrl());
-            }
-
-
-            CustomPagerAdapter customPagerAdapter = new CustomPagerAdapter(getContext(), pictureURLS);
-            ViewPager viewPager = rootView.findViewById(R.id.imageViewPager);
-            viewPager.setAdapter(customPagerAdapter);
+//
+//            ArrayList<String> pictureURLS = new ArrayList<>();
+//
+//            for (Picture p:product.getPictureList()){
+//
+//                pictureURLS.add(p.getUrl());
+//            }
+//
+//
+//            CustomPagerAdapter customPagerAdapter = new CustomPagerAdapter(getContext(), pictureURLS);
+//            ViewPager viewPager = rootView.findViewById(R.id.imageViewPager);
+//            viewPager.setAdapter(customPagerAdapter);
 
         }
 

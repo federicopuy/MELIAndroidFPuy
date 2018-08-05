@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     private static Retrofit retrofit = null;
 
-    public static Retrofit getClient(Context mContext) {
+    public static ApiInterface getClient() {
 
         if (retrofit==null){
             OkHttpClient client = new OkHttpClient.Builder()
@@ -21,6 +21,6 @@ public class RetrofitClient {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
-        return retrofit;
+        return retrofit.create(ApiInterface.class);
     }
 }

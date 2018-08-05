@@ -12,12 +12,13 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
 
-    @GET(NetworkUtils.SITE_ARGENTINA +"search")
-    Call<SearchResults> getSearchResults(@Query("q") String searchParameter);
+    @GET(NetworkUtils.SITE_ARGENTINA +"search" )
+    Call<SearchResults> getSearchResults(@Query("q") String searchParameter,
+                                         @Query("offset") long offset,
+                                         @Query("limit") long limit);
 
     @GET(NetworkUtils.ITEMS + "{productId}/" + NetworkUtils.DESCRIPTION)
     Call<Description> getItemDescription(@Path("productId") String productId);
-
 
     @GET(NetworkUtils.ITEMS + "{productId}")
     Call<Item> getItem(@Path("productId") String productId);

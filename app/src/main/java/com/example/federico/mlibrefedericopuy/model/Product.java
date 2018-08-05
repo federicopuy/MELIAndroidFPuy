@@ -1,5 +1,8 @@
 package com.example.federico.mlibrefedericopuy.model;
 
+import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -368,5 +371,26 @@ public class Product {
 
     public void setPictureList(List<Picture> pictureList) {
         this.pictureList = pictureList;
+    }
+
+    public static DiffUtil.ItemCallback<Product> DIFF_CALLBACK = new DiffUtil.ItemCallback<Product>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {
+            return oldItem.id == newItem.id;
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Product oldItem, @NonNull Product newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+
+        Product article = (Product) obj;
+        return article.id == this.id;
     }
 }
