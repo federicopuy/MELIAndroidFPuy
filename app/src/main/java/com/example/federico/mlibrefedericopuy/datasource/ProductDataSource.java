@@ -7,7 +7,8 @@ import android.util.Log;
 
 import com.example.federico.mlibrefedericopuy.model.Product;
 import com.example.federico.mlibrefedericopuy.model.SearchResults;
-import com.example.federico.mlibrefedericopuy.AppController;
+import com.example.federico.mlibrefedericopuy.network.AppController;
+import com.example.federico.mlibrefedericopuy.network.NetworkState;
 import com.example.federico.mlibrefedericopuy.network.NetworkUtils;
 
 import retrofit2.Call;
@@ -43,8 +44,9 @@ public class ProductDataSource extends PageKeyedDataSource<Long, Product> {
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Long> params, @NonNull LoadInitialCallback<Long, Product> callback) {
 
-        initialLoading.postValue(NetworkUtils.LOADING);
-        networkState.postValue(NetworkUtils.LOADING);
+
+        initialLoading.postValue(NetworkState.LOADING);
+        networkState.postValue(NetworkState.LOADING);
 
         appController.getApiInterface().getSearchResults(query, 0, NetworkUtils.LIMIT).
                 enqueue(new Callback<SearchResults>() {
@@ -53,20 +55,19 @@ public class ProductDataSource extends PageKeyedDataSource<Long, Product> {
                         if (response.isSuccessful()) {
 
                             callback.onResult(response.body().getProducts(),null, Long.valueOf(NetworkUtils.LIMIT));
-                            initialLoading.postValue(NetworkUtils.LOADED);
-                            networkState.postValue(NetworkUtils.LOADED);
+                            initialLoading.postValue(NetworkState.LOADED);
+                            networkState.postValue(NetworkState.LOADED);
 
                         } else {
-                            initialLoading.postValue(NetworkUtils.FAILED);
-                            networkState.postValue(NetworkUtils.FAILED);
-
+                            initialLoading.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
+                            networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                         }
                     }
 
                     @Override
                     public void onFailure(Call<SearchResults> call, Throwable t) {
-                        initialLoading.postValue(NetworkUtils.FAILED);
-                        networkState.postValue(NetworkUtils.FAILED);
+                        String errorMessage = t == null ? "unknown error" : t.getMessage();
+                        networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                     }
                 });
 
@@ -82,7 +83,7 @@ public class ProductDataSource extends PageKeyedDataSource<Long, Product> {
 
         Log.i(TAG, "Loading Range " + params.key + " Count " + params.requestedLoadSize);
 
-        networkState.postValue(NetworkUtils.LOADING);
+        networkState.postValue(NetworkState.LOADING);
 
         appController.getApiInterface().getSearchResults(query, params.key, params.requestedLoadSize)
         .enqueue(new Callback<SearchResults>() {
@@ -92,19 +93,18 @@ public class ProductDataSource extends PageKeyedDataSource<Long, Product> {
 
                     long nextKey = (params.key == response.body().getPaging().getTotal()) ? null : params.key + NetworkUtils.LIMIT;
                     callback.onResult(response.body().getProducts(), nextKey);
-                    networkState.postValue(NetworkUtils.LOADED);
+                    networkState.postValue(NetworkState.LOADED);
 
                 } else {
-                    initialLoading.postValue(NetworkUtils.FAILED);
-                    networkState.postValue(NetworkUtils.FAILED);
+                    networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
 
             }
 
             @Override
             public void onFailure(Call<SearchResults> call, Throwable t) {
-                initialLoading.postValue(NetworkUtils.FAILED);
-                networkState.postValue(NetworkUtils.FAILED);
+                String errorMessage = t == null ? "unknown error" : t.getMessage();
+                networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
         });
 

@@ -1,36 +1,27 @@
 package com.example.federico.mlibrefedericopuy.viewmodel;
 
-import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import com.example.federico.mlibrefedericopuy.datasource.ProductDataSource;
-import com.example.federico.mlibrefedericopuy.datasource.ProductInfoDataSource;
 import com.example.federico.mlibrefedericopuy.datasource.factory.ProductDataFactory;
 import com.example.federico.mlibrefedericopuy.model.Product;
-import com.example.federico.mlibrefedericopuy.AppController;
+import com.example.federico.mlibrefedericopuy.network.AppController;
 import com.example.federico.mlibrefedericopuy.network.NetworkState;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class SearchResultsViewModel extends ViewModel implements LifecycleObserver {
+public class SearchResultsViewModel extends ViewModel {
 
     private Executor executor;
     private LiveData<NetworkState> networkState;
     private LiveData<PagedList<Product>> productLiveData;
     private String query = "IPOD";
     private AppController appController;
-    ProductDataFactory productDataFactory;
-
+    private ProductDataFactory productDataFactory;
 
     public SearchResultsViewModel() {
 

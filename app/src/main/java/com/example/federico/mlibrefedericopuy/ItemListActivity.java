@@ -2,30 +2,28 @@ package com.example.federico.mlibrefedericopuy;
 
 import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
-import android.arch.paging.PagedList;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.ScrollView;
 
+import com.example.federico.mlibrefedericopuy.activities.ItemDetailActivity;
 import com.example.federico.mlibrefedericopuy.adapters.ProductListAdapter;
-import com.example.federico.mlibrefedericopuy.model.Description;
 import com.example.federico.mlibrefedericopuy.model.Product;
-import com.example.federico.mlibrefedericopuy.network.NetworkUtils;
+import com.example.federico.mlibrefedericopuy.network.AppController;
+import com.example.federico.mlibrefedericopuy.network.NetworkState;
 import com.example.federico.mlibrefedericopuy.utils.Constants;
-import com.example.federico.mlibrefedericopuy.viewmodel.ProductInfoViewModel;
 import com.example.federico.mlibrefedericopuy.viewmodel.SearchResultsViewModel;
 import com.google.gson.Gson;
 
@@ -46,15 +44,18 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
     RecyclerView recyclerView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.coordinatorMaster)
+            View coordinatorMaster;
     ProductListAdapter adapter;
     SearchResultsViewModel searchResultsViewModel;
     private boolean isTablet;
+    private static final String TAG = "ItemListActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
-        ButterKnife.bind(this);
+       // ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
@@ -75,13 +76,25 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
             adapter.submitList(pagedList);
             recyclerView.setAdapter(adapter);
         });
+
+        searchResultsViewModel.getNetworkState().observe(this, new Observer<NetworkState>() {
+            @Override
+            public void onChanged(@Nullable NetworkState networkState) {
+                if (networkState != null && networkState.getStatus() == NetworkState.Status.FAILED) {
+                    Log.e(TAG, networkState.getMsg());
+                    displayErrorMessage();
+                }
+            }
+        });
+
+
     }
+
 
     @Override
     public void onProductClicked(final View view) {
 
         final Product product = (Product) view.getTag();
-
         goToNextActivity(product);
 
     }
@@ -130,16 +143,29 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
             public boolean onQueryTextChange(String s) {
 
                 if (!(s.equals(""))) {
-
                     searchResultsViewModel.setQuery(s);
                     searchResultsViewModel.invalidateDataSource();
-
                 }
                 return false;
             }
         });
 
         return true;
+    }
+
+
+    void displayErrorMessage() {
+
+        Snackbar snackbar;
+        if (!(NetworkState.isNetworkConnected(this))) {
+            snackbar = Snackbar
+                    .make(coordinatorMaster, R.string.error_internet, Snackbar.LENGTH_LONG);
+        } else {
+            snackbar = Snackbar
+                    .make(coordinatorMaster, R.string.error, Snackbar.LENGTH_LONG);
+        }
+        snackbar.show();
+
     }
     //todo restore instance state
 }

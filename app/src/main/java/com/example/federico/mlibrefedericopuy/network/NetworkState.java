@@ -1,5 +1,11 @@
 package com.example.federico.mlibrefedericopuy.network;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import java.util.Objects;
+
 public class NetworkState {
 
     public enum Status{
@@ -31,5 +37,14 @@ public class NetworkState {
 
     public String getMsg() {
         return msg;
+    }
+
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean isNetworkConnected(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = Objects.requireNonNull(cm).getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

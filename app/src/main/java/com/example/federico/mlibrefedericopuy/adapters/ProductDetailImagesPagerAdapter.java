@@ -14,13 +14,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class CustomPagerAdapter extends PagerAdapter {
+public class ProductDetailImagesPagerAdapter extends PagerAdapter {
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private ArrayList<String> picturesURLs;
 
-    public CustomPagerAdapter(Context context, ArrayList<String> picturesURLs) {
+    public ProductDetailImagesPagerAdapter(Context context, ArrayList<String> picturesURLs) {
         mContext = context;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.picturesURLs = picturesURLs;
@@ -42,7 +42,11 @@ public class CustomPagerAdapter extends PagerAdapter {
 
         View itemView = mLayoutInflater.inflate(R.layout.pager_item, container, false);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.imageViewPicturePager);
-        Picasso.get().load(picturesURLs.get(position)).into(imageView);
+        Picasso.get().
+                load(picturesURLs.get(position))
+                .placeholder(R.drawable.ic_photo_black_24dp)
+                .error(R.drawable.ic_error_outline_black_24dp)
+                .into(imageView);
         container.addView(itemView);
 
         return itemView;

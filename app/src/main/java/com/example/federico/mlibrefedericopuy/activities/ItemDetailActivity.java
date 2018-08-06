@@ -1,4 +1,4 @@
-package com.example.federico.mlibrefedericopuy;
+package com.example.federico.mlibrefedericopuy.activities;
 
 import android.content.Intent;
 import android.media.Image;
@@ -13,6 +13,9 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.example.federico.mlibrefedericopuy.ItemDetailFragment;
+import com.example.federico.mlibrefedericopuy.ItemListActivity;
+import com.example.federico.mlibrefedericopuy.R;
 import com.example.federico.mlibrefedericopuy.utils.Constants;
 
 /**
