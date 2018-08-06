@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ItemListActivity"
+            android:name=".ui.ProductListActivity"
             android:label="@string/buscar_producto"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTop">
@@ -28,13 +28,13 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".activities.ItemDetailActivity"
-            android:label="@string/title_item_detail"
-            android:parentActivityName=".ItemListActivity"
+            android:name=".ui.ProductDetailActivity"
+            android:label="@string/producto"
+            android:parentActivityName=".ui.ProductListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.federico.mlibrefedericopuy.ItemListActivity" />
+                android:value="com.example.federico.mlibrefedericopuy.ui.ProductListActivity" />
         </activity>
     </application>
 

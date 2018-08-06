@@ -1,35 +1,24 @@
-package com.example.federico.mlibrefedericopuy.activities;
+package com.example.federico.mlibrefedericopuy.ui;
 
 import android.content.Intent;
-import android.media.Image;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
-import com.example.federico.mlibrefedericopuy.ItemDetailFragment;
-import com.example.federico.mlibrefedericopuy.ItemListActivity;
 import com.example.federico.mlibrefedericopuy.R;
 import com.example.federico.mlibrefedericopuy.utils.Constants;
 
 /**
- * An activity representing a single Item detail screen. This
- * activity is only used on narrow width devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
- * in a {@link ItemListActivity}.
+ * Actividad usada unicamente para celulares o dispositivos con pantallas chicas
  */
-public class ItemDetailActivity extends AppCompatActivity {
+public class ProductDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_detail);
+        setContentView(R.layout.activity_product_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
@@ -43,8 +32,7 @@ public class ItemDetailActivity extends AppCompatActivity {
             String stepJson = getIntent().getStringExtra(Constants.PRODUCT_INTENT_JSON);
             Bundle arguments = new Bundle();
             arguments.putString(Constants.PRODUCT_FRAGMENT_JSON, stepJson);
-
-            ItemDetailFragment fragment = new ItemDetailFragment();
+            ProductDetailFragment fragment = new ProductDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.item_detail_container, fragment)
@@ -56,8 +44,7 @@ public class ItemDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-
-            navigateUpTo(new Intent(this, ItemListActivity.class));
+            navigateUpTo(new Intent(this, ProductListActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

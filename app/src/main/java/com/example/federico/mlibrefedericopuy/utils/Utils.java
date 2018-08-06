@@ -38,8 +38,10 @@ public class Utils {
             return pictureUrls;
     }
     public static String getAvailableQuantity(Long availableQuantity){
-
         return String.valueOf(availableQuantity) + " Disponibles";
+    }
 
+    public static String getSoldAmount(Long soldAmount){
+        return String.valueOf(soldAmount) + " vendidos";
     }
 }

@@ -15,19 +15,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductInfoDataSource {
+public class AdditionalProductInfoDataSource {
+
+    /*
+     * DataSource para buscar informacion de un producto en particular,
+     * tales como su descripcion o imagenes.
+     *
+     * */
 
     private AppController appController;
     private MutableLiveData networkState;
 
-
-    public ProductInfoDataSource(AppController appController) {
+    public AdditionalProductInfoDataSource(AppController appController) {
         this.appController = appController;
         networkState = new MutableLiveData();
     }
 
     public LiveData<Description> loadProductDescription(String productId) {
-
         final MutableLiveData<Description> data = new MutableLiveData<>();
         networkState.postValue(NetworkState.LOADING);
 
@@ -50,14 +54,11 @@ public class ProductInfoDataSource {
                         networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                     }
                 });
-
         return data;
     }
 
-    public LiveData<List<String>> loadItem(String productId) {
-
+    public LiveData<List<String>> getProductImages(String productId) {
         final MutableLiveData<List<String>> data = new MutableLiveData<>();
-
         appController.getApiInterface().getItem(productId)
                 .enqueue(new Callback<Item>() {
                     @Override
@@ -65,7 +66,6 @@ public class ProductInfoDataSource {
                         if (response.isSuccessful()) {
                             data.setValue(Utils.getPicturesList(response.body()));
                             networkState.postValue(NetworkState.LOADED);
-
                         } else {
                             networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                         }

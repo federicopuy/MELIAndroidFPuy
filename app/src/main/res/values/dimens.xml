@@ -6,6 +6,31 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="height_each_product_list">180dp</dimen>
     <dimen name="margin_top_search_view">12dp</dimen>
+    <dimen name="images_height">260dp</dimen>
+    <dimen name="margin_std">8dp</dimen>
+    <dimen name="marginTopStd">16dp</dimen>
+    <dimen name="title_size">24sp</dimen>
+    <dimen name="margin_end_star">2dp</dimen>
+    <dimen name="margin_end_rating">24dp</dimen>
+    <dimen name="price_size">34sp</dimen>
+    <dimen name="condition_size">18sp</dimen>
+    <dimen name="margin_start_mpago_logo">26dp</dimen>
+    <dimen name="margin_start_end_fragment">16dp</dimen>
+    <dimen name="subheader_text_size">18sp</dimen>
+    <dimen name="description_title_size">28sp</dimen>
+    <dimen name="description_text_size">16sp</dimen>
+    <dimen name="margin_top_middle">12dp</dimen>
+    <dimen name="width_product_photo">130dp</dimen>
+    <dimen name="margin_photo">4dp</dimen>
+    <dimen name="margin_start_title">20dp</dimen>
+    <dimen name="product_title_size">18sp</dimen>
+    <dimen name="product_condition_size">14sp</dimen>
+    <dimen name="product_price_size">28sp</dimen>
+    <dimen name="margin_start_star">68dp</dimen>
+    <dimen name="margin_start_rating">8dp</dimen>
+    <dimen name="base_padding">4dp</dimen>
+    <dimen name="base_margin_top">12dp</dimen>
+
 
 
 </resources>

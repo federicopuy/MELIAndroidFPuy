@@ -1,7 +1,9 @@
 package com.example.federico.mlibrefedericopuy.adapters;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +18,19 @@ import java.util.ArrayList;
 
 public class ProductDetailImagesPagerAdapter extends PagerAdapter {
 
-    private Context mContext;
+    /*
+     * ViewPager para mostrar imagenes en DetailFragment
+     *
+     * */
+
     private LayoutInflater mLayoutInflater;
     private ArrayList<String> picturesURLs;
+    private Context context;
+
 
     public ProductDetailImagesPagerAdapter(Context context, ArrayList<String> picturesURLs) {
-        mContext = context;
-        mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.context = context;
+        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.picturesURLs = picturesURLs;
     }
 
@@ -48,6 +56,9 @@ public class ProductDetailImagesPagerAdapter extends PagerAdapter {
                 .error(R.drawable.ic_error_outline_black_24dp)
                 .into(imageView);
         container.addView(itemView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            imageView.setForeground(ResourcesCompat.getDrawable(context.getResources(), R.drawable.scrim, null));
+        }
 
         return itemView;
     }

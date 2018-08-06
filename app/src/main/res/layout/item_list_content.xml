@@ -10,27 +10,26 @@
 
     <ImageView
         android:id="@+id/imageViewProductPhoto"
-        android:layout_width="130dp"
+        android:layout_width="@dimen/width_product_photo"
         android:layout_height="match_parent"
         android:contentDescription="@string/photo_description"
         android:scaleType="fitCenter"
-        android:layout_margin="4dp"
+        android:layout_margin="@dimen/margin_photo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <TextView
         android:id="@+id/tvProductTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="@dimen/margin_start_title"
         android:layout_marginTop="@dimen/margin_top_search_view"
         android:ellipsize="end"
         android:maxLines="2"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textSize="18sp"
+        android:textSize="@dimen/product_title_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageViewProductPhoto"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top_search_view"
-        android:textSize="14sp"
+        android:textSize="@dimen/product_condition_size"
         android:textAllCaps="true"
         app:layout_constraintStart_toStartOf="@+id/tvProductTitle"
         app:layout_constraintTop_toBottomOf="@+id/tvProductTitle"
@@ -53,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top_search_view"
-        android:textSize="28sp"
+        android:textSize="@dimen/product_price_size"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintStart_toStartOf="@+id/tvProductTitle"
         app:layout_constraintTop_toBottomOf="@+id/tvCondition"
@@ -73,18 +72,20 @@
         android:id="@+id/star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
+        android:layout_marginStart="@dimen/margin_start_star"
         android:visibility="invisible"
         android:layout_marginTop="@dimen/margin_top_search_view"
         app:layout_constraintStart_toEndOf="@+id/tvCondition"
         app:layout_constraintTop_toBottomOf="@+id/tvProductTitle"
-        app:srcCompat="@drawable/ic_star_black_24dp" />
+        app:srcCompat="@drawable/ic_star_black_24dp"
+        android:contentDescription="@string/rating"
+        tools:ignore="VectorDrawableCompat" />
 
     <TextView
         android:id="@+id/tvRating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/margin_start_rating"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/star"
         app:layout_constraintStart_toEndOf="@+id/star"

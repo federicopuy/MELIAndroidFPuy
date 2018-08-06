@@ -33,10 +33,10 @@ import java.util.List;
         private Object officialStoreId;
         @SerializedName("price")
         @Expose
-        private Long price;
+        private Double price;
         @SerializedName("base_price")
         @Expose
-        private Long basePrice;
+        private Double basePrice;
         @SerializedName("original_price")
         @Expose
         private Object originalPrice;
@@ -225,7 +225,7 @@ import java.util.List;
          * @param attributes
          * @param basePrice
          */
-        public Item(String id, String siteId, String title, Object subtitle, Long sellerId, String categoryId, Object officialStoreId, Long price, Long basePrice, Object originalPrice, String currencyId, Long initialQuantity, Long availableQuantity, Long soldQuantity, List<Object> saleTerms, String buyingMode, String listingTypeId, String startTime, String stopTime, String condition, String permalink, String thumbnail, String secureThumbnail, List<Picture> pictures, Object videoId, List<Description> descriptions, Boolean acceptsMercadopago, List<Object> nonMercadoPagoPaymentMethods, Shipping shipping, String internationalDeliveryMode, SellerAddress sellerAddress, Object sellerContact, Location location,List<Object> coverageAreas, List<Attribute> attributes, List<Object> warnings, String listingSource, List<Object> variations, String status, List<Object> subStatus, List<String> tags, String warranty, Object catalogProductId, Object domainId, Object parentItemId, Object differentialPricing, List<String> dealIds, Boolean automaticRelist, String dateCreated, String lastUpdated, Object health) {
+        public Item(String id, String siteId, String title, Object subtitle, Long sellerId, String categoryId, Object officialStoreId, Double price, Double basePrice, Object originalPrice, String currencyId, Long initialQuantity, Long availableQuantity, Long soldQuantity, List<Object> saleTerms, String buyingMode, String listingTypeId, String startTime, String stopTime, String condition, String permalink, String thumbnail, String secureThumbnail, List<Picture> pictures, Object videoId, List<Description> descriptions, Boolean acceptsMercadopago, List<Object> nonMercadoPagoPaymentMethods, Shipping shipping, String internationalDeliveryMode, SellerAddress sellerAddress, Object sellerContact, Location location,List<Object> coverageAreas, List<Attribute> attributes, List<Object> warnings, String listingSource, List<Object> variations, String status, List<Object> subStatus, List<String> tags, String warranty, Object catalogProductId, Object domainId, Object parentItemId, Object differentialPricing, List<String> dealIds, Boolean automaticRelist, String dateCreated, String lastUpdated, Object health) {
             super();
             this.id = id;
             this.siteId = siteId;
@@ -336,19 +336,19 @@ import java.util.List;
             this.officialStoreId = officialStoreId;
         }
 
-        public Long getPrice() {
+        public Double getPrice() {
             return price;
         }
 
-        public void setPrice(Long price) {
+        public void setPrice(Double price) {
             this.price = price;
         }
 
-        public Long getBasePrice() {
+        public Double getBasePrice() {
             return basePrice;
         }
 
-        public void setBasePrice(Long basePrice) {
+        public void setBasePrice(Double basePrice) {
             this.basePrice = basePrice;
         }
 

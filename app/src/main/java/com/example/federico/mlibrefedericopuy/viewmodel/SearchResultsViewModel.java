@@ -16,6 +16,11 @@ import java.util.concurrent.Executors;
 
 public class SearchResultsViewModel extends ViewModel {
 
+    /*
+     * Capa intermedia entre ProductDataSource y Ui
+     *
+     * */
+
     private Executor executor;
     private LiveData<NetworkState> networkState;
     private LiveData<PagedList<Product>> productLiveData;
@@ -24,7 +29,6 @@ public class SearchResultsViewModel extends ViewModel {
     private ProductDataFactory productDataFactory;
 
     public SearchResultsViewModel() {
-
     }
 
     public void setAppController(AppController appController) {
@@ -32,9 +36,7 @@ public class SearchResultsViewModel extends ViewModel {
     }
 
     public void init() {
-
         productDataFactory = new ProductDataFactory(appController, query);
-
         executor = Executors.newFixedThreadPool(5);
         networkState = Transformations.switchMap(productDataFactory.getMutableLiveData(),
                 dataSource -> dataSource.getNetworkState());
@@ -60,9 +62,9 @@ public class SearchResultsViewModel extends ViewModel {
     }
 
     public void invalidateDataSource() {
+        //metodo para invalidar current DataSource y efectuar llamada con nueva query
         productDataFactory.setQuery(query);
         productDataFactory.getProductDataSource().invalidate();
-
     }
 
     public void setQuery(String query){

@@ -1,15 +1,16 @@
-package com.example.federico.mlibrefedericopuy;
+package com.example.federico.mlibrefedericopuy.ui;
 
 import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -17,110 +18,86 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.ProgressBar;
 
-import com.example.federico.mlibrefedericopuy.activities.ItemDetailActivity;
+import com.example.federico.mlibrefedericopuy.R;
 import com.example.federico.mlibrefedericopuy.adapters.ProductListAdapter;
-import com.example.federico.mlibrefedericopuy.model.Product;
 import com.example.federico.mlibrefedericopuy.network.AppController;
 import com.example.federico.mlibrefedericopuy.network.NetworkState;
-import com.example.federico.mlibrefedericopuy.utils.Constants;
 import com.example.federico.mlibrefedericopuy.viewmodel.SearchResultsViewModel;
-import com.google.gson.Gson;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.federico.mlibrefedericopuy.utils.Constants.LIST_STATE_KEY;
+
 /**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ItemDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
+ * Actividad principal donde se muestra una lista de productos segun un parametro de busqueda
+ * ingresado por el usuario. En tablets soporta master-detail view.
  */
-public class ItemListActivity extends AppCompatActivity implements ProductListAdapter.ProductClickListener {
+public class ProductListActivity extends AppCompatActivity {
+    private static final String TAG = "ProductListActivity";
 
     @BindView(R.id.item_list)
     RecyclerView recyclerView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.coordinatorMaster)
-            View coordinatorMaster;
-    ProductListAdapter adapter;
+    View coordinatorMaster;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
     SearchResultsViewModel searchResultsViewModel;
-    private boolean isTablet;
-    private static final String TAG = "ItemListActivity";
+    private Parcelable mListState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_list);
-       // ButterKnife.bind(this);
+        setContentView(R.layout.activity_product_list);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
+        boolean isTablet = false;
         if (findViewById(R.id.item_detail_container) != null) {
             isTablet = true;
         }
 
+        //recyclerview set up
+        ProductListAdapter adapter = new ProductListAdapter(this, isTablet);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(ProductListActivity.this,
+                DividerItemDecoration.VERTICAL));
+
+        //observer set up
         searchResultsViewModel = ViewModelProviders.of(this).get(SearchResultsViewModel.class);
         searchResultsViewModel.setAppController(AppController.create(this));
         searchResultsViewModel.init();
 
-        adapter = new ProductListAdapter(this);
-
-        recyclerView.addItemDecoration(new DividerItemDecoration(ItemListActivity.this,
-                DividerItemDecoration.VERTICAL));
-
+        // Observer para actualizar lista de productos mostrados
         searchResultsViewModel.getProductLiveData().observe(this, pagedList -> {
+
             adapter.submitList(pagedList);
             recyclerView.setAdapter(adapter);
         });
 
+        // Observer para actualizar network state
         searchResultsViewModel.getNetworkState().observe(this, new Observer<NetworkState>() {
             @Override
             public void onChanged(@Nullable NetworkState networkState) {
-                if (networkState != null && networkState.getStatus() == NetworkState.Status.FAILED) {
-                    Log.e(TAG, networkState.getMsg());
-                    displayErrorMessage();
+                if (networkState.getStatus() == NetworkState.Status.RUNNING) {
+                    progressBar.setVisibility(View.VISIBLE);
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    if (networkState != null && networkState.getStatus() == NetworkState.Status.FAILED) {
+                        Log.e(TAG, networkState.getMsg());
+                        displayErrorMessage();
+                    }
                 }
             }
         });
-
-
     }
 
-
-    @Override
-    public void onProductClicked(final View view) {
-
-        final Product product = (Product) view.getTag();
-        goToNextActivity(product);
-
-    }
-
-    void goToNextActivity(Product product) {
-
-        Gson productGson = new Gson();
-        String productJson = productGson.toJson(product);
-
-        if (isTablet) {
-            Bundle arguments = new Bundle();
-            arguments.putString(Constants.PRODUCT_FRAGMENT_JSON, productJson);
-
-            ItemDetailFragment fragment = new ItemDetailFragment();
-            fragment.setArguments(arguments);
-            this.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.item_detail_container, fragment)
-                    .commit();
-        } else {
-            Intent intent = new Intent(ItemListActivity.this, ItemDetailActivity.class);
-            intent.putExtra(Constants.PRODUCT_INTENT_JSON, productJson);
-            startActivity(intent);
-        }
-
-    }
-
+    /*-------------------------------------- Menu --------------------------------------------***/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -143,19 +120,19 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
             public boolean onQueryTextChange(String s) {
 
                 if (!(s.equals(""))) {
+                    //efectuar llamada con nueva query ingresada por el usuario
                     searchResultsViewModel.setQuery(s);
                     searchResultsViewModel.invalidateDataSource();
                 }
                 return false;
             }
         });
-
         return true;
     }
 
+    /*-------------------------------------- Display Errors --------------------------------------------***/
 
-    void displayErrorMessage() {
-
+    private void displayErrorMessage() {
         Snackbar snackbar;
         if (!(NetworkState.isNetworkConnected(this))) {
             snackbar = Snackbar
@@ -165,7 +142,30 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
                     .make(coordinatorMaster, R.string.error, Snackbar.LENGTH_LONG);
         }
         snackbar.show();
+    }
+
+    /*-------------------------------------- Save RecyclerView State-------------------------------------***/
+
+    @Override
+    public void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+
+        mListState = recyclerView.getLayoutManager().onSaveInstanceState();
+        bundle.putParcelable(LIST_STATE_KEY, mListState);
 
     }
-    //todo restore instance state
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mListState != null) {
+            recyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+        }
+    }
 }

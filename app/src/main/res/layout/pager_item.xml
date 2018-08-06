@@ -7,5 +7,6 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imageViewPicturePager" />
+        android:id="@+id/imageViewPicturePager"
+        android:contentDescription="@string/foto_producto" />
 </LinearLayout>

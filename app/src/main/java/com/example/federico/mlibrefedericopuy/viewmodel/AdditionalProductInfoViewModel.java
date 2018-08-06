@@ -6,25 +6,30 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.example.federico.mlibrefedericopuy.network.AppController;
-import com.example.federico.mlibrefedericopuy.datasource.ProductInfoDataSource;
+import com.example.federico.mlibrefedericopuy.datasource.AdditionalProductInfoDataSource;
 import com.example.federico.mlibrefedericopuy.model.Description;
 import com.example.federico.mlibrefedericopuy.network.NetworkState;
 
 import java.util.List;
 
-public class ProductInfoViewModel extends ViewModel{
+public class AdditionalProductInfoViewModel extends ViewModel{
+
+    /*
+     * Capa intermedia entre AdditionalProductInfoDataSource y Ui
+     *
+     * */
 
     private AppController appController;
     private LiveData<NetworkState> networkState;
     private  LiveData<Description> productDescription;
     private LiveData<List<String>> picturesUrls;
 
-    public ProductInfoViewModel(AppController appController, String productId) {
+    AdditionalProductInfoViewModel(AppController appController, String productId) {
         this.appController = appController;
-        ProductInfoDataSource productInfoDataSource = new ProductInfoDataSource(appController);
-        productDescription = productInfoDataSource.loadProductDescription(productId);
-        picturesUrls = productInfoDataSource.loadItem(productId);
-        networkState = productInfoDataSource.getNetworkState();
+        AdditionalProductInfoDataSource additionalProductInfoDataSource = new AdditionalProductInfoDataSource(appController);
+        productDescription = additionalProductInfoDataSource.loadProductDescription(productId);
+        picturesUrls = additionalProductInfoDataSource.getProductImages(productId);
+        networkState = additionalProductInfoDataSource.getNetworkState();
     }
 
     public LiveData<Description> getProductDescription(){
@@ -38,7 +43,6 @@ public class ProductInfoViewModel extends ViewModel{
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
-
         @NonNull
         private final AppController appController;
         private final String productId;
@@ -51,11 +55,7 @@ public class ProductInfoViewModel extends ViewModel{
         @Override
         public <T extends ViewModel> T create(Class<T> modelClass) {
             //noinspection unchecked
-            return (T) new ProductInfoViewModel(appController, productId);
+            return (T) new AdditionalProductInfoViewModel(appController, productId);
         }
-
     }
-
-
-
 }

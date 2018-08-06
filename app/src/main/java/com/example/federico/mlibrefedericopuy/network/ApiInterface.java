@@ -2,7 +2,6 @@ package com.example.federico.mlibrefedericopuy.network;
 
 import com.example.federico.mlibrefedericopuy.model.Description;
 import com.example.federico.mlibrefedericopuy.model.Item;
-import com.example.federico.mlibrefedericopuy.model.Product;
 import com.example.federico.mlibrefedericopuy.model.SearchResults;
 
 import retrofit2.Call;
