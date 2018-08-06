@@ -10,6 +10,7 @@ import com.example.federico.mlibrefedericopuy.datasource.factory.ProductDataFact
 import com.example.federico.mlibrefedericopuy.model.Product;
 import com.example.federico.mlibrefedericopuy.network.AppController;
 import com.example.federico.mlibrefedericopuy.network.NetworkState;
+import com.example.federico.mlibrefedericopuy.utils.Constants;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -24,7 +25,7 @@ public class SearchResultsViewModel extends ViewModel {
     private Executor executor;
     private LiveData<NetworkState> networkState;
     private LiveData<PagedList<Product>> productLiveData;
-    private String query = "IPOD";
+    private String query = Constants.DEFAULT_SEARCH;
     private AppController appController;
     private ProductDataFactory productDataFactory;
 
