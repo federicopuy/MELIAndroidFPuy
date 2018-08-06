@@ -1,5 +1,6 @@
 package com.example.federico.mlibrefedericopuy.viewmodel;
 
+import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -21,30 +22,29 @@ import com.example.federico.mlibrefedericopuy.network.NetworkState;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class SearchResultsViewModel extends ViewModel {
+public class SearchResultsViewModel extends ViewModel implements LifecycleObserver {
 
     private Executor executor;
     private LiveData<NetworkState> networkState;
     private LiveData<PagedList<Product>> productLiveData;
-    private String query;
-    ProductDataFactory productDataFactory;
-    PagedList.Config pagedListConfig;
+    private String query = "IPOD";
     private AppController appController;
+    ProductDataFactory productDataFactory;
 
-    public SearchResultsViewModel(@NonNull AppController appController, String query) {
-        this.appController = appController;
-        productDataFactory = new ProductDataFactory(appController, query);
 
-        init();
+    public SearchResultsViewModel() {
 
     }
 
+    public void setAppController(AppController appController) {
+        this.appController = appController;
+    }
 
     public void init() {
 
+        productDataFactory = new ProductDataFactory(appController, query);
 
         executor = Executors.newFixedThreadPool(5);
-
         networkState = Transformations.switchMap(productDataFactory.getMutableLiveData(),
                 dataSource -> dataSource.getNetworkState());
 
@@ -57,8 +57,6 @@ public class SearchResultsViewModel extends ViewModel {
         productLiveData = (new LivePagedListBuilder(productDataFactory, pagedListConfig))
                 .setFetchExecutor(executor)
                 .build();
-
-
     }
 
 
@@ -70,24 +68,14 @@ public class SearchResultsViewModel extends ViewModel {
         return productLiveData;
     }
 
-    public void invalidateDataSource(String q) {
-
-
+    public void invalidateDataSource() {
+        productDataFactory.setQuery(query);
         productDataFactory.getProductDataSource().invalidate();
 
-        productDataFactory = new ProductDataFactory(appController, q);
-        executor = Executors.newFixedThreadPool(5);
+    }
 
-        PagedList.Config pagedListConfig =
-                (new PagedList.Config.Builder())
-                        .setEnablePlaceholders(false)
-                        .setInitialLoadSizeHint(10)
-                        .setPageSize(20).build();
-
-        productLiveData = (new LivePagedListBuilder(productDataFactory, pagedListConfig))
-                .setFetchExecutor(executor)
-                .build();
-
+    public void setQuery(String query){
+        this.query = query;
     }
 
 }

@@ -29,6 +29,10 @@ public class ProductInfoViewModel extends ViewModel{
     }
 
     public LiveData<Description> getProductDescription(){
+
+
+
+
         return productDescription;
     }
 

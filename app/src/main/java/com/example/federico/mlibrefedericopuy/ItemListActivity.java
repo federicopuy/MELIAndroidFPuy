@@ -2,6 +2,7 @@ package com.example.federico.mlibrefedericopuy;
 
 import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.arch.paging.PagedList;
 import android.content.Context;
@@ -48,9 +49,6 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
     ProductListAdapter adapter;
     SearchResultsViewModel searchResultsViewModel;
     private boolean isTablet;
-    private static final String SCROLL_POSITION = "scrollPosition";
-    ScrollView mScrollView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,19 +57,19 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
-        mScrollView = findViewById(R.id.scrollViewMaster);
 
         if (findViewById(R.id.item_detail_container) != null) {
             isTablet = true;
         }
 
+        searchResultsViewModel = ViewModelProviders.of(this).get(SearchResultsViewModel.class);
+        searchResultsViewModel.setAppController(AppController.create(this));
+        searchResultsViewModel.init();
 
-        searchResultsViewModel = new SearchResultsViewModel(AppController.create(this), "IPOD");
         adapter = new ProductListAdapter(this);
 
-        //getProducts(searchResultsViewModel.getQuery());
-//        recyclerView.addItemDecoration(new DividerItemDecoration(ItemListActivity.this,
-//                DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(ItemListActivity.this,
+                DividerItemDecoration.VERTICAL));
 
         searchResultsViewModel.getProductLiveData().observe(this, pagedList -> {
             adapter.submitList(pagedList);
@@ -79,29 +77,16 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
         });
     }
 
-    void getProducts(String query) {
-
-    }
-
     @Override
     public void onProductClicked(final View view) {
 
         final Product product = (Product) view.getTag();
 
-        ProductInfoViewModel.Factory factory = new ProductInfoViewModel.Factory(AppController.create(this),
-                product.getId());
-        ProductInfoViewModel productInfoViewModel = ViewModelProviders.of(this, factory).get(ProductInfoViewModel.class);
+        goToNextActivity(product);
 
-
-        productInfoViewModel.getProductDescription().observe(this, new Observer<Description>() {
-            @Override
-            public void onChanged(@Nullable Description description) {
-                goToNextActivity(product, description);
-            }
-        });
     }
 
-    void goToNextActivity(Product product, Description description) {
+    void goToNextActivity(Product product) {
 
         Gson productGson = new Gson();
         String productJson = productGson.toJson(product);
@@ -109,7 +94,6 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
         if (isTablet) {
             Bundle arguments = new Bundle();
             arguments.putString(Constants.PRODUCT_FRAGMENT_JSON, productJson);
-            arguments.putString(Constants.DESCRIPTION_FRAGMENT_JSON, description.getPlainText());
 
             ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);
@@ -119,7 +103,6 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
         } else {
             Intent intent = new Intent(ItemListActivity.this, ItemDetailActivity.class);
             intent.putExtra(Constants.PRODUCT_INTENT_JSON, productJson);
-            intent.putExtra(Constants.DESCRIPTION_FRAGMENT_JSON, description.getPlainText());
             startActivity(intent);
         }
 
@@ -140,11 +123,6 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-
-
-                 searchResultsViewModel.invalidateDataSource(s);
-
-
                 return false;
             }
 
@@ -153,9 +131,9 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
 
                 if (!(s.equals(""))) {
 
+                    searchResultsViewModel.setQuery(s);
+                    searchResultsViewModel.invalidateDataSource();
 
-
-                    //getProducts(s);
                 }
                 return false;
             }
@@ -163,41 +141,5 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
 
         return true;
     }
-
-//
-//    protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putParcelable("KeyForLayoutManagerState", recyclerView.getLayoutManager().onSaveInstanceState());
-//    }
-//
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        Parcelable state = savedInstanceState.getParcelable("KeyForLayoutManagerState");
-//        recyclerView.getLayoutManager().onRestoreInstanceState(state);
-//    }
-//
-
-
-//    protected void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//       mListState = recyclerView.getLayoutManager().onSaveInstanceState();
-//
-//        //outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
-//        outState.putParcelable(SCROLL_POSITION, mListState);
-//
-//    }
-//
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        if (savedInstanceState != null)
-//            mListState = savedInstanceState.getParcelable(SCROLL_POSITION);
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        if (mListState != null) {
-//            recyclerView.getLayoutManager().onRestoreInstanceState(mListState);
-//        }
-//    }
+    //todo restore instance state
 }

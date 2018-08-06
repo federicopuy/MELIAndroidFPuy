@@ -1,119 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ItemDetailFragment"
-    tools:layout_editor_absoluteY="81dp">
+    android:layout_height="match_parent">
 
-
-    <TextView
-        android:id="@+id/tvTitle"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="wrap_content"
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:padding="16dp"
-        android:textIsSelectable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout2"
-        tools:text="Heladera Coventry" />
+        tools:context=".ItemDetailFragment">
 
-    <TextView
-        android:id="@+id/tvRating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCondition"
-        tools:text="(4.9)" />
-
-    <TextView
-        android:id="@+id/tvCondition"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAmountSold"
-        tools:text="por Fravega" />
-
-    <TextView
-        android:id="@+id/tvAmountSold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAvailableQuantity"
-        tools:text="15 vendidos" />
-
-    <TextView
-        android:id="@+id/tvPrice"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:padding="16dp"
-        android:textIsSelectable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
-        tools:text="$10.500" />
-
-    <TextView
-        android:id="@+id/tvAvailableQuantity"
-        style="?android:attr/textAppearanceLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:padding="16dp"
-        android:textIsSelectable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPrice"
-        tools:text="5" />
-
-    <TextView
-        android:id="@+id/tvDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvRating"
-        tools:text="@string/example_description" />
-
-    <FrameLayout
-        android:id="@+id/frameLayout2"
-        android:layout_width="384dp"
-        android:layout_height="120dp"
-        android:layout_margin="16dp"
-        android:layout_marginStart="16dp"
-        android:elevation="12dp"
-        android:outlineProvider="bounds"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="0dp"
-        tools:targetApi="lollipop">
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/imageViewPager"
+        <FrameLayout
+            android:id="@+id/imagesFrameLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="260dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp"
+            android:outlineProvider="bounds"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:targetApi="lollipop">
 
-        </android.support.v4.view.ViewPager>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/imageViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v4.view.ViewPager>
+        </FrameLayout>
+
+        <View
+            android:id="@+id/topLine"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imagesFrameLayout" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/TextViewsBaseStyle"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topLine"
+            tools:text="Heladera Coventry" />
+
+        <ImageView
+            android:id="@+id/starImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_marginEnd="2dp"
+            android:src="@drawable/ic_star_black_24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvRating"
+            app:layout_constraintEnd_toStartOf="@+id/tvRating"
+            app:layout_constraintTop_toTopOf="@+id/tvRating" />
+
+        <TextView
+            android:id="@+id/tvRating"
+            style="@style/TextViewsBaseStyle"
+            android:visibility="invisible"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvPrice"
+            tools:text="(4.9)" />
+
+        <TextView
+            android:id="@+id/tvPrice"
+            style="@style/TextViewsBaseStyle"
+            android:textSize="34sp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            tools:text="$10.500" />
+
+        <TextView
+            android:id="@+id/tvCondition"
+            style="@style/TextViewsBaseStyle"
+            android:textAllCaps="true"
+            android:textSize="18sp"
+            android:textColor="@color/colorGreen"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvPrice"
+            tools:text="USADO" />
 
 
-    </FrameLayout>
+        <View
+            android:id="@+id/middleLine"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvCondition" />
+
+        <ImageView
+            android:id="@+id/logoMpago"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:src="@mipmap/ic_mpago"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/tvCondition"
+            app:layout_constraintStart_toEndOf="@+id/tvCondition"
+            app:layout_constraintTop_toTopOf="@+id/tvCondition" />
+
+        <TextView
+            android:id="@+id/tvAmountSold"
+            style="@style/TextViewsBaseStyle"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAvailableQuantity"
+            tools:text="15 vendidos" />
+
+        <TextView
+            android:id="@+id/tvAvailableQuantity"
+            style="@style/TextViewsBaseStyle"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/middleLine"
+            tools:text="5 disponibles" />
+
+        <View
+            android:id="@+id/bottomLine"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAmountSold" />
+
+        <TextView
+            android:id="@+id/descriptionTitle"
+            style="@style/TextViewsBaseStyle"
+            android:text="@string/descripci_n"
+            android:textColor="@color/colorGrey"
+            android:textSize="28sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bottomLine" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            style="@style/TextViewsBaseStyle"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/descriptionTitle"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionTitle"
+            tools:text="@string/example_description" />
 
 
-</android.support.constraint.ConstraintLayout>
+        <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="260dp"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:background="@drawable/scrim"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/frameLayout2"/>-->
 
 
+    </android.support.constraint.ConstraintLayout>
 
+
+</ScrollView>
 

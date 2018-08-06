@@ -21,7 +21,7 @@ public class ProductDataFactory extends DataSource.Factory{
 
     @Override
     public DataSource create() {
-         productDataSource = new ProductDataSource(appController, query);
+        productDataSource = new ProductDataSource(appController, query);
         mutableLiveData.postValue(productDataSource);
         return productDataSource;
     }
@@ -32,5 +32,9 @@ public class ProductDataFactory extends DataSource.Factory{
 
     public ProductDataSource getProductDataSource() {
         return productDataSource;
+    }
+
+    public void setQuery(String q){
+        query = q;
     }
 }

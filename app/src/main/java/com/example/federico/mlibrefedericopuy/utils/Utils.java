@@ -31,12 +31,15 @@ public class Utils {
     }
 
     public static List<String> getPicturesList(Item item){
-
         ArrayList<String> pictureUrls = new ArrayList<>();
-
             for (Picture p:item.getPictures()){
                 pictureUrls.add(p.getUrl());
             }
             return pictureUrls;
+    }
+    public static String getAvailableQuantity(Long availableQuantity){
+
+        return String.valueOf(availableQuantity) + " Disponibles";
+
     }
 }

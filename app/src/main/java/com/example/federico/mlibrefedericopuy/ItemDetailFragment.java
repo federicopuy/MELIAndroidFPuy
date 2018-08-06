@@ -1,18 +1,29 @@
 package com.example.federico.mlibrefedericopuy;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.federico.mlibrefedericopuy.adapters.CustomPagerAdapter;
+import com.example.federico.mlibrefedericopuy.model.Description;
 import com.example.federico.mlibrefedericopuy.model.Product;
 import com.example.federico.mlibrefedericopuy.utils.Constants;
 import com.example.federico.mlibrefedericopuy.utils.Utils;
+import com.example.federico.mlibrefedericopuy.viewmodel.ProductInfoViewModel;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,12 +48,18 @@ public class ItemDetailFragment extends Fragment {
     @BindView(R.id.tvRating)
     TextView tvRating;
     @BindView(R.id.tvCondition)
-    TextView tvSeller;
+    TextView tvCondition;
     @BindView(R.id.tvAmountSold)
     TextView tvAmountSold;
-
     @BindView(R.id.tvDescription)
     TextView tvDescription;
+    @BindView(R.id.descriptionTitle)
+    TextView descriptionTitleTv;
+    @BindView(R.id.starImage)
+    ImageView starImageView;
+    @BindView(R.id.logoMpago)
+    ImageView logoMpago;
+
     private Unbinder mUnbinder;
     String description;
 
@@ -61,7 +78,7 @@ public class ItemDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            String productJsonString = getArguments().getString(Constants.PRODUCT_FRAGMENT_JSON,"");
+            String productJsonString = getArguments().getString(Constants.PRODUCT_FRAGMENT_JSON, "");
             Gson gson = new Gson();
             product = gson.fromJson(productJsonString, Product.class);
 
@@ -70,11 +87,6 @@ public class ItemDetailFragment extends Fragment {
             if (appBarLayout != null) {
                 appBarLayout.setTitle(product.getTitle());
             }
-
-//            ImageView photoImageView = activity.findViewById(R.id.header);
-//            String imagePath = product.getThumbnail();
-//            Picasso.get().load(imagePath).into(photoImageView);
-
 
         }
     }
@@ -88,26 +100,48 @@ public class ItemDetailFragment extends Fragment {
 
             tvTitle.setText(product.getTitle());
             tvPrice.setText(Utils.getFormattedPrice(product.getPrice()));
-            tvAvailableQuantity.setText(String.valueOf(product.getAvailableQuantity()));
-            tvRating.setText(String.valueOf(product.getReviews().getRatingAverage()));
-            //tvSeller.setText();
+
+            if (product.getReviews().getRatingAverage()!=null){
+                //todo set en invisible
+                tvRating.setVisibility(View.VISIBLE);
+                starImageView.setVisibility(View.VISIBLE);
+                tvRating.setText(Utils.getFormattedRatingAverage(product.getReviews().getRatingAverage()));
+            }
+
+            if (product.getAcceptsMercadopago()){
+                logoMpago.setVisibility(View.VISIBLE);
+            }
+            tvAvailableQuantity.setText(Utils.getAvailableQuantity(product.getAvailableQuantity()));
+
+
             tvAmountSold.setText(String.valueOf(product.getSoldQuantity() + " vendidos"));
-            description = getArguments().getString(Constants.DESCRIPTION_FRAGMENT_JSON);
+            tvCondition.setText(Utils.getCondition(product.getCondition()));
 
-            tvDescription.setText(description);
 
-//
-//            ArrayList<String> pictureURLS = new ArrayList<>();
-//
-//            for (Picture p:product.getPictureList()){
-//
-//                pictureURLS.add(p.getUrl());
-//            }
-//
-//
-//            CustomPagerAdapter customPagerAdapter = new CustomPagerAdapter(getContext(), pictureURLS);
-//            ViewPager viewPager = rootView.findViewById(R.id.imageViewPager);
-//            viewPager.setAdapter(customPagerAdapter);
+            ProductInfoViewModel.Factory factory = new ProductInfoViewModel.Factory(AppController.create(getContext()),
+                    product.getId());
+            ProductInfoViewModel productInfoViewModel = ViewModelProviders.of(this, factory).get(ProductInfoViewModel.class);
+
+            productInfoViewModel.getPicturesUrls().observe(this, new Observer<List<String>>() {
+                @Override
+                public void onChanged(@Nullable List<String> strings) {
+
+                    CustomPagerAdapter customPagerAdapter = new CustomPagerAdapter(getContext(), (ArrayList<String>) strings);
+                    ViewPager viewPager = rootView.findViewById(R.id.imageViewPager);
+                    viewPager.setAdapter(customPagerAdapter);
+                }
+            });
+
+
+            productInfoViewModel.getProductDescription().observe(this, new Observer<Description>() {
+                @Override
+                public void onChanged(@Nullable Description description) {
+                    if (!(description.getPlainText().equals(""))) {
+                        descriptionTitleTv.setVisibility(View.VISIBLE);
+                        tvDescription.setText(description.getPlainText());
+                    }
+                }
+            });
 
         }
 

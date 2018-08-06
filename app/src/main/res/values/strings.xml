@@ -3,4 +3,6 @@
     <string name="title_item_detail">Item Detail</string>
     <string name="photo_description">Foto que describe al producto</string>
     <string name="example_description">AURICULAR EXTRA BASS ESPECIFICACIONES • Tipo de producto: NUEVO-ORIGINAL (viene en su caja) • Marca: Sony • Modelo: Sony MDR-XB550AP • Color: Negro, Azul, Rojo y Blanco (consulte colores en stock antes de ofertar) • Tecnología EXTRA-BASS para una definición exquisita en graves • Control y micrófono integrados compatibles con iOs y android • Diadema metálica ajustable, para un mayor confort al uso • Almohadillas alcolchadas para una comodidad prolongada INCLUYE • 1 Auricular Sony Mdr-xb550ap Xtra Bass</string>
+    <string name="descripci_n">Descripción</string>
+    <string name="buscar_producto">Buscar Producto</string>
 </resources>
