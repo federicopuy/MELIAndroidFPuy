@@ -18,6 +18,11 @@
     
     -->
 
+    <ScrollView
+        android:id="@+id/scrollViewMaster"
+        android:layout_width="@dimen/item_width"
+        android:layout_height="match_parent">
+
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/item_list"
@@ -30,10 +35,12 @@
         tools:context="com.example.federico.mlibrefedericopuy.ItemListActivity"
         tools:listitem="@layout/item_list_content" />
 
+    </ScrollView>
     <FrameLayout
         android:id="@+id/item_detail_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3" />
+
 
 </LinearLayout>

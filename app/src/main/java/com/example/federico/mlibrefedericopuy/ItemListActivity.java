@@ -3,9 +3,11 @@ package com.example.federico.mlibrefedericopuy;
 import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.arch.paging.PagedList;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -15,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.ScrollView;
 
 import com.example.federico.mlibrefedericopuy.adapters.ProductListAdapter;
 import com.example.federico.mlibrefedericopuy.model.Description;
@@ -45,6 +48,9 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
     ProductListAdapter adapter;
     SearchResultsViewModel searchResultsViewModel;
     private boolean isTablet;
+    private static final String SCROLL_POSITION = "scrollPosition";
+    ScrollView mScrollView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,29 +59,27 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
+        mScrollView = findViewById(R.id.scrollViewMaster);
 
         if (findViewById(R.id.item_detail_container) != null) {
             isTablet = true;
         }
 
-        getProducts("Apple");
 
+        searchResultsViewModel = new SearchResultsViewModel(AppController.create(this), "IPOD");
+        adapter = new ProductListAdapter(this);
+
+        //getProducts(searchResultsViewModel.getQuery());
+//        recyclerView.addItemDecoration(new DividerItemDecoration(ItemListActivity.this,
+//                DividerItemDecoration.VERTICAL));
+
+        searchResultsViewModel.getProductLiveData().observe(this, pagedList -> {
+            adapter.submitList(pagedList);
+            recyclerView.setAdapter(adapter);
+        });
     }
 
     void getProducts(String query) {
-
-        searchResultsViewModel = new SearchResultsViewModel(AppController.create(this), query);
-        adapter = new ProductListAdapter(this);
-        searchResultsViewModel.getProductLiveData().observe(this, pagedList -> {
-            adapter.submitList(pagedList);
-        });
-
-        // todo falta network state
-        //todo end of list
-        assert recyclerView != null;
-        recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(ItemListActivity.this,
-                DividerItemDecoration.VERTICAL));
 
     }
 
@@ -87,6 +91,8 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
         ProductInfoViewModel.Factory factory = new ProductInfoViewModel.Factory(AppController.create(this),
                 product.getId());
         ProductInfoViewModel productInfoViewModel = ViewModelProviders.of(this, factory).get(ProductInfoViewModel.class);
+
+
         productInfoViewModel.getProductDescription().observe(this, new Observer<Description>() {
             @Override
             public void onChanged(@Nullable Description description) {
@@ -134,14 +140,23 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+
+
+                 searchResultsViewModel.invalidateDataSource(s);
+
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
 
-                getProducts(s);
+                if (!(s.equals(""))) {
 
+
+
+                    //getProducts(s);
+                }
                 return false;
             }
         });
@@ -149,5 +164,40 @@ public class ItemListActivity extends AppCompatActivity implements ProductListAd
         return true;
     }
 
+//
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putParcelable("KeyForLayoutManagerState", recyclerView.getLayoutManager().onSaveInstanceState());
+//    }
+//
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        Parcelable state = savedInstanceState.getParcelable("KeyForLayoutManagerState");
+//        recyclerView.getLayoutManager().onRestoreInstanceState(state);
+//    }
+//
 
+
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//       mListState = recyclerView.getLayoutManager().onSaveInstanceState();
+//
+//        //outState.putParcelable(SCROLL_POSITION, recyclerView.getLayoutManager().onSaveInstanceState());
+//        outState.putParcelable(SCROLL_POSITION, mListState);
+//
+//    }
+//
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        if (savedInstanceState != null)
+//            mListState = savedInstanceState.getParcelable(SCROLL_POSITION);
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        if (mListState != null) {
+//            recyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+//        }
+//    }
 }

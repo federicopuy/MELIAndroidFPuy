@@ -31,6 +31,7 @@ public class ProductDataSource extends PageKeyedDataSource<Long, Product> {
         this.query = query;
     }
 
+
     public MutableLiveData getNetworkState() {
         return networkState;
     }

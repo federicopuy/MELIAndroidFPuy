@@ -1,7 +1,6 @@
 package com.example.federico.mlibrefedericopuy.adapters;
 
 import android.arch.paging.PagedListAdapter;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -44,17 +43,25 @@ public class ProductListAdapter extends PagedListAdapter<Product, RecyclerView.V
             ProductViewHolder holder = (ProductViewHolder) viewHolder;
             Product product =  getItem(i);
 
-            String imagePath = product.getThumbnail();
-            Picasso.get().load(imagePath).into(holder.mImageViewProductPhoto);
-
+            try {
+                String imagePath = product.getThumbnail();
+                Picasso.get().load(imagePath).into(holder.mImageViewProductPhoto);
+                //todo picasso placeholder
+            }catch (NullPointerException n){
+                n.printStackTrace();
+            }
             holder.tvProductTitle.setText(product.getTitle());
-            holder.tvSeller.setText("en " + product.getSellerAddress().getCity().getName());
+            holder.tvCondition.setText(Utils.getCondition(product.getCondition()));
             holder.tvPrice.setText(Utils.getFormattedPrice(product.getPrice()));
             if (product.getSoldQuantity()>0){
                 holder.tvAmountSold.setVisibility(View.VISIBLE);
                 holder.tvAmountSold.setText(String.valueOf(product.getSoldQuantity()) + " vendidos");
             }
-            holder.tvRating.setText(String.valueOf(product.getReviews().getRatingAverage()));
+            if (product.getReviews().getRatingAverage()!=null){
+                holder.tvRating.setVisibility(View.VISIBLE);
+                holder.imageStar.setVisibility(View.VISIBLE);
+                holder.tvRating.setText(String.valueOf(Utils.getFormattedRatingAverage(product.getReviews().getRatingAverage())));
+            }
             holder.itemView.setTag(getCurrentList().get(i));
         }
     }
@@ -64,14 +71,16 @@ public class ProductListAdapter extends PagedListAdapter<Product, RecyclerView.V
         ImageView mImageViewProductPhoto;
         @BindView(R.id.tvProductTitle)
         TextView tvProductTitle;
-        @BindView(R.id.tvSeller)
-        TextView tvSeller;
+        @BindView(R.id.tvCondition)
+        TextView tvCondition;
         @BindView(R.id.tvPrice)
         TextView tvPrice;
         @BindView(R.id.tvAmountSold)
         TextView tvAmountSold;
         @BindView(R.id.tvRating)
         TextView tvRating;
+        @BindView(R.id.star)
+        ImageView imageStar;
         private ProductClickListener mListener;
 
         ProductViewHolder(View view, ProductClickListener listener) {

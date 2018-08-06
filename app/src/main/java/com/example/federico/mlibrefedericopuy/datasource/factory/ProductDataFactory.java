@@ -8,10 +8,10 @@ import com.example.federico.mlibrefedericopuy.AppController;
 
 public class ProductDataFactory extends DataSource.Factory{
 
-
     private MutableLiveData<ProductDataSource> mutableLiveData;
     private AppController appController;
     private String query;
+    ProductDataSource productDataSource;
 
     public ProductDataFactory(AppController appController, String query) {
         this.appController = appController;
@@ -21,7 +21,7 @@ public class ProductDataFactory extends DataSource.Factory{
 
     @Override
     public DataSource create() {
-        ProductDataSource productDataSource = new ProductDataSource(appController, query);
+         productDataSource = new ProductDataSource(appController, query);
         mutableLiveData.postValue(productDataSource);
         return productDataSource;
     }
@@ -30,4 +30,7 @@ public class ProductDataFactory extends DataSource.Factory{
         return mutableLiveData;
     }
 
+    public ProductDataSource getProductDataSource() {
+        return productDataSource;
+    }
 }

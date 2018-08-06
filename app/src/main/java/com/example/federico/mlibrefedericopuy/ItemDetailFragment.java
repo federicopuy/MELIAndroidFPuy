@@ -1,27 +1,18 @@
 package com.example.federico.mlibrefedericopuy;
 
 import android.app.Activity;
-import android.os.Build;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.federico.mlibrefedericopuy.adapters.CustomPagerAdapter;
-import com.example.federico.mlibrefedericopuy.model.Picture;
 import com.example.federico.mlibrefedericopuy.model.Product;
 import com.example.federico.mlibrefedericopuy.utils.Constants;
 import com.example.federico.mlibrefedericopuy.utils.Utils;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,7 +36,7 @@ public class ItemDetailFragment extends Fragment {
     TextView tvAvailableQuantity;
     @BindView(R.id.tvRating)
     TextView tvRating;
-    @BindView(R.id.tvSeller)
+    @BindView(R.id.tvCondition)
     TextView tvSeller;
     @BindView(R.id.tvAmountSold)
     TextView tvAmountSold;
