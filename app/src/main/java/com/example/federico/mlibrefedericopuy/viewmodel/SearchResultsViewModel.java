@@ -3,8 +3,10 @@ package com.example.federico.mlibrefedericopuy.viewmodel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
+import android.support.annotation.NonNull;
 
 import com.example.federico.mlibrefedericopuy.datasource.factory.ProductDataFactory;
 import com.example.federico.mlibrefedericopuy.model.Product;
@@ -29,11 +31,9 @@ public class SearchResultsViewModel extends ViewModel {
     private AppController appController;
     private ProductDataFactory productDataFactory;
 
-    public SearchResultsViewModel() {
-    }
-
-    public void setAppController(AppController appController) {
+    public SearchResultsViewModel(AppController appController) {
         this.appController = appController;
+        init();
     }
 
     public void init() {
@@ -70,6 +70,21 @@ public class SearchResultsViewModel extends ViewModel {
 
     public void setQuery(String query){
         this.query = query;
+    }
+
+    public static class Factory extends ViewModelProvider.NewInstanceFactory {
+        @NonNull
+        private final AppController appController;
+
+        public Factory(@NonNull AppController appController) {
+            this.appController = appController;
+        }
+
+        @Override
+        public <T extends ViewModel> T create(Class<T> modelClass) {
+            //noinspection unchecked
+            return (T) new SearchResultsViewModel(appController);
+        }
     }
 
 }

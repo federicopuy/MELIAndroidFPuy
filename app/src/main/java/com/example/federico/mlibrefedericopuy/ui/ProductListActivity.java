@@ -69,13 +69,11 @@ public class ProductListActivity extends AppCompatActivity {
                 DividerItemDecoration.VERTICAL));
 
         //observer set up
-        searchResultsViewModel = ViewModelProviders.of(this).get(SearchResultsViewModel.class);
-        searchResultsViewModel.setAppController(AppController.create(this));
-        searchResultsViewModel.init();
+        SearchResultsViewModel.Factory factory = new SearchResultsViewModel.Factory(AppController.create(this));
+        searchResultsViewModel = ViewModelProviders.of(this, factory).get(SearchResultsViewModel.class);
 
         // Observer para actualizar lista de productos mostrados
         searchResultsViewModel.getProductLiveData().observe(this, pagedList -> {
-
             adapter.submitList(pagedList);
             recyclerView.setAdapter(adapter);
         });
@@ -143,29 +141,5 @@ public class ProductListActivity extends AppCompatActivity {
         }
         snackbar.show();
     }
-
-    /*-------------------------------------- Save RecyclerView State-------------------------------------***/
-
-    @Override
-    public void onSaveInstanceState(Bundle bundle) {
-        super.onSaveInstanceState(bundle);
-
-        mListState = recyclerView.getLayoutManager().onSaveInstanceState();
-        bundle.putParcelable(LIST_STATE_KEY, mListState);
-
-    }
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null) {
-            mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
-        }
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mListState != null) {
-            recyclerView.getLayoutManager().onRestoreInstanceState(mListState);
-        }
-    }
+    
 }
