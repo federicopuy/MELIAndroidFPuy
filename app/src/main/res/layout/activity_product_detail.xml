@@ -2,30 +2,184 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.ProductDetailActivity"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context=".detail.ProductDetailActivity"
     tools:ignore="MergeRootFrame">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/detail_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/detail_toolbar"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_width="match_parent"
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/item_detail_container"
+    <ScrollView
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <android.support.constraint.ConstraintLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <FrameLayout
+                android:id="@+id/imagesFrameLayout"
+                android:layout_height="@dimen/images_height"
+                android:layout_width="match_parent"
+                android:outlineProvider="bounds"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <android.support.v4.view.ViewPager
+                    android:foreground="@drawable/scrim"
+                    android:id="@+id/imageViewPager"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent">
+
+                </android.support.v4.view.ViewPager>
+            </FrameLayout>
+
+
+            <TextView
+                style="@style/TextViewsBaseStyle"
+                android:ellipsize="end"
+                android:id="@+id/tvTitle"
+                android:maxLines="2"
+                android:textSize="@dimen/title_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imagesFrameLayout"
+                tools:text="Heladera Coventry"/>
+
+            <ImageView
+                android:contentDescription="@string/star"
+                android:id="@+id/starImage"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_end_star"
+                android:layout_width="wrap_content"
+                android:src="@drawable/ic_star_black_24dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/tvRating"
+                app:layout_constraintEnd_toStartOf="@+id/tvRating"
+                app:layout_constraintTop_toTopOf="@+id/tvRating"/>
+
+            <TextView
+                style="@style/TextViewsBaseStyle"
+                android:id="@+id/tvRating"
+                android:layout_marginEnd="@dimen/margin_end_rating"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/tvPrice"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvPrice"
+                tools:text="(4.9)"/>
+
+            <TextView
+                style="@style/TextViewsBaseStyle"
+                android:id="@+id/tvPrice"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/price_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+                tools:text="$10.500"/>
+
+            <TextView
+                style="@style/TextViewsBaseStyle"
+                android:id="@+id/tvCondition"
+                android:textAllCaps="true"
+                android:textColor="@color/colorGreen"
+                android:textSize="@dimen/condition_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPrice"
+                tools:text="USADO"/>
+
+
+            <View
+                style="@style/HorizontalLines"
+                android:id="@+id/middleLine"
+                android:layout_marginTop="@dimen/margin_top_middle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvCondition"/>
+
+            <ImageView
+                android:contentDescription="@string/logo_mercadopago"
+                android:id="@+id/logoMpago"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_mpago_logo"
+                android:layout_width="wrap_content"
+                android:src="@mipmap/ic_mpago"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/tvCondition"
+                app:layout_constraintStart_toEndOf="@+id/tvCondition"
+                app:layout_constraintTop_toTopOf="@+id/tvCondition"/>
+
+            <TextView
+                style="@style/TextViewsBaseStyle"
+                android:id="@+id/tvAmountSold"
+                android:layout_marginEnd="@dimen/margin_start_end_fragment"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="@dimen/subheader_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/middleLine"
+                tools:text="15 vendidos"/>
+
+            <TextView
+                style="@style/TextViewsBaseStyle"
+                android:id="@+id/tvAvailableQuantity"
+                android:textSize="@dimen/subheader_text_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/middleLine"
+                tools:text="5 disponibles"/>
+
+            <View
+                style="@style/HorizontalLines"
+                android:id="@+id/bottomLine"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAmountSold"/>
+
+            <TextView
+                style="@style/TextViewsBaseStyle"
+                android:id="@+id/descriptionTitle"
+                android:text="@string/descripci_n"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="@dimen/description_title_size"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bottomLine"/>
+
+            <TextView
+                style="@style/TextViewsBaseStyle"
+                android:id="@+id/tvDescription"
+                android:layout_marginEnd="@dimen/margin_start_end_fragment"
+                android:textSize="@dimen/description_text_size"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@id/tvAmountSold"
+                app:layout_constraintStart_toStartOf="@+id/descriptionTitle"
+                app:layout_constraintTop_toBottomOf="@+id/descriptionTitle"
+                tools:text="@string/example_description"/>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/tvDescription"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imagesFrameLayout"/>
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
+
