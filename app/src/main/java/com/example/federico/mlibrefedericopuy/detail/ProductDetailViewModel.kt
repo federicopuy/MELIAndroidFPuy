@@ -23,7 +23,7 @@ class ProductDetailViewModel(private val repository: ProductDetailRepository, pr
     /**
      * Extracts a list of urls from an Item object.
      */
-     fun imageMapper(item: Item): List<String> {
+    private fun imageMapper(item: Item): List<String> {
         val pictureUrls = mutableListOf<String>()
         item.pictures.forEach {
             pictureUrls += it.url
