@@ -1,12 +1,11 @@
 package com.example.federico.mlibrefedericopuy.list
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.example.federico.mlibrefedericopuy.R
 import com.example.federico.mlibrefedericopuy.model.ProductInfo
-import com.example.federico.mlibrefedericopuy.utils.Utils
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_list_content.view.*
 

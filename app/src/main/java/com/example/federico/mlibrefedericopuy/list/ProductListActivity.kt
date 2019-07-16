@@ -1,26 +1,21 @@
 package com.example.federico.mlibrefedericopuy.list
 
 import android.app.SearchManager
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.View
+import android.widget.SearchView
 import android.widget.Toast
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.example.federico.mlibrefedericopuy.R
 import com.example.federico.mlibrefedericopuy.core.getViewModel
 import com.example.federico.mlibrefedericopuy.detail.ProductDetailActivity
 import com.example.federico.mlibrefedericopuy.model.ProductInfo
 import com.example.federico.mlibrefedericopuy.utils.Constants
-
 import kotlinx.android.synthetic.main.activity_product_list.*
-import kotlinx.android.synthetic.main.item_list.*
 
 class ProductListActivity : AppCompatActivity() {
 
@@ -31,29 +26,24 @@ class ProductListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_product_list)
         setSupportActionBar(toolbar)
 
-        rvItemList.layoutManager = LinearLayoutManager(this)
-        rvItemList.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-
         viewModel = getViewModel { ProductListViewModel(ProductListRepository()) }
 
         viewModel.results.observe(this, Observer {
             when (it) {
-                is ProductListState.ShowItems -> drawItems(it.products)
+                is ProductListState.ShowItems -> renderItems(it.products)
                 is ProductListState.Loading -> showLoading(it.isLoading)
                 is ProductListState.ShowError -> showError()
             }
         })
     }
 
-    private fun drawItems(products: List<ProductInfo>) {
-        val adapter = ProductListAdapter(products) {
+    private fun renderItems(products: List<ProductInfo>) {
+        rvItemList.adapter = ProductListAdapter(products) {
             //OnClickListener for the adapter
             val intent = Intent(this, ProductDetailActivity::class.java)
             intent.putExtra(Constants.PRODUCT_INTENT_JSON, it)
             startActivity(intent)
         }
-        rvItemList.adapter = adapter
-        adapter.notifyDataSetChanged()
     }
 
     private fun showLoading(isLoading: Boolean) =

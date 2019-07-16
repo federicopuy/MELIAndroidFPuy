@@ -1,6 +1,9 @@
 package com.example.federico.mlibrefedericopuy.detail
 
-import android.arch.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import com.example.federico.mlibrefedericopuy.model.Description
 import com.example.federico.mlibrefedericopuy.model.Item
 
@@ -8,7 +11,7 @@ class ProductDetailViewModel(private val repository: ProductDetailRepository, pr
 
     val productDescription: LiveData<Description>
         get() = _productDescription
-    private val _productDescription = repository.retrieveDescription(productId)
+    private val _productDescription : MutableLiveData<Description> = repository.retrieveDescription(productId)
 
     val loadingStatus: LiveData<Boolean>
         get() = _loadingStatus
@@ -23,7 +26,7 @@ class ProductDetailViewModel(private val repository: ProductDetailRepository, pr
     /**
      * Extracts a list of urls from an Item object.
      */
-     fun imageMapper(item: Item): List<String> {
+    private fun imageMapper(item: Item): List<String> {
         val pictureUrls = mutableListOf<String>()
         item.pictures.forEach {
             pictureUrls += it.url

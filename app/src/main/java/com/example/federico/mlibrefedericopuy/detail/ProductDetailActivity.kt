@@ -1,13 +1,12 @@
 package com.example.federico.mlibrefedericopuy.detail
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.example.federico.mlibrefedericopuy.R
 import com.example.federico.mlibrefedericopuy.core.getViewModel
 import com.example.federico.mlibrefedericopuy.list.ProductListActivity
@@ -25,7 +24,6 @@ class ProductDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_detail)
         setSupportActionBar(detail_toolbar)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val product = intent.getParcelableExtra<ProductInfo>(Constants.PRODUCT_INTENT_JSON)
