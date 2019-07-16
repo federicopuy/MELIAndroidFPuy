@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 
 class ProductListViewModel(private val repository: ProductListRepository) : ViewModel() {
 
-    private val queryLiveData = MutableLiveData<String>()
+    val queryLiveData = MutableLiveData<String>()
 
     val results: LiveData<ProductListState>
         get() = _results
