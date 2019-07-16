@@ -1,7 +1,6 @@
 package com.example.federico.mlibrefedericopuy.list
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.federico.mlibrefedericopuy.model.Product
 import com.example.federico.mlibrefedericopuy.model.ProductInfo
 import com.example.federico.mlibrefedericopuy.network.RetrofitClient
@@ -17,14 +16,13 @@ class ProductListRepository {
     private val compositeDisposable = CompositeDisposable()
     private val client = RetrofitClient.client
 
-    fun retrieveProducts(query: String): LiveData<ProductListState> {
+    fun retrieveProducts(query: String): MutableLiveData<ProductListState> {
         val stateLiveData = MutableLiveData<ProductListState>()
 
         client.getSearchResults(query, 10, 10)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { stateLiveData.value = ProductListState.Loading(true) }
-                .doAfterTerminate { stateLiveData.value = ProductListState.Loading(false) }
                 .map { productMapper(it.products) }
                 .subscribe(object : SingleObserver<List<ProductInfo>> {
                     override fun onSubscribe(d: Disposable) {
@@ -32,10 +30,12 @@ class ProductListRepository {
                     }
 
                     override fun onSuccess(results: List<ProductInfo>) {
+                        stateLiveData.value = ProductListState.Loading(false)
                         stateLiveData.value = ProductListState.ShowItems(results)
                     }
 
                     override fun onError(e: Throwable) {
+                        stateLiveData.value = ProductListState.Loading(false)
                         stateLiveData.value = ProductListState.ShowError
                     }
                 })

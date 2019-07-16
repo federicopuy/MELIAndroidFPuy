@@ -2,18 +2,16 @@ package com.example.federico.mlibrefedericopuy.detail
 
 import android.content.Context
 import android.os.Build
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-
+import androidx.core.content.res.ResourcesCompat
+import androidx.viewpager.widget.PagerAdapter
 import com.example.federico.mlibrefedericopuy.R
 import com.squareup.picasso.Picasso
-
-import java.util.ArrayList
+import java.util.*
 
 class ProductDetailImagesPagerAdapter(private val context: Context, private val picturesURLs: ArrayList<String>)
     : PagerAdapter() {

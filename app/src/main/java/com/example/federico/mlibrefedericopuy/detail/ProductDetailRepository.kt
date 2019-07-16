@@ -1,19 +1,15 @@
 package com.example.federico.mlibrefedericopuy.detail
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.federico.mlibrefedericopuy.model.Description
 import com.example.federico.mlibrefedericopuy.model.Item
-import com.example.federico.mlibrefedericopuy.model.Product
-import com.example.federico.mlibrefedericopuy.model.ProductInfo
 import com.example.federico.mlibrefedericopuy.network.RetrofitClient
-import com.example.federico.mlibrefedericopuy.utils.Utils
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.util.ArrayList
 
 class ProductDetailRepository {
 
@@ -22,11 +18,9 @@ class ProductDetailRepository {
 
     val loadingStatus : LiveData<Boolean>
         get() = _loadingStatus
-
     private val _loadingStatus = MutableLiveData<Boolean>()
 
-    fun retrieveDescription(productId: String): LiveData<Description> {
-
+    fun retrieveDescription(productId: String): MutableLiveData<Description> {
         val productDescriptionLiveData = MutableLiveData<Description>()
 
         client.getItemDescription(productId)
@@ -50,8 +44,7 @@ class ProductDetailRepository {
         return productDescriptionLiveData
     }
 
-    fun retrieveProductImages(productId: String): LiveData<Item> {
-
+    fun retrieveProductImages(productId: String): MutableLiveData<Item> {
         val itemLiveData = MutableLiveData<Item>()
 
         client.getItem(productId)
@@ -65,9 +58,6 @@ class ProductDetailRepository {
                     }
 
                     override fun onSuccess(item: Item) {
-
-
-
                         itemLiveData.value = item
                     }
 
@@ -75,7 +65,6 @@ class ProductDetailRepository {
                         // TODO HANDLE ERROR
                     }
                 })
-
         return itemLiveData
     }
 
