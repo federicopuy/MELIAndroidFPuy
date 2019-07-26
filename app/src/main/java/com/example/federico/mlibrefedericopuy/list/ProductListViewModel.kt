@@ -17,8 +17,8 @@ class ProductListViewModel(private val repository: ProductListRepository) : View
     /**
      * Called whenever the user enters a new query
      */
-    fun searchProducts(query: String) {
-        queryLiveData.value = query
+    fun searchProducts(query: CharSequence) {
+        queryLiveData.value = query.toString()
     }
 
     override fun onCleared() {

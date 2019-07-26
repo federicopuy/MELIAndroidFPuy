@@ -1,21 +1,20 @@
 package com.example.federico.mlibrefedericopuy.list
 
-import android.app.SearchManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.example.federico.mlibrefedericopuy.R
+import com.example.federico.mlibrefedericopuy.R.layout.activity_product_list
 import com.example.federico.mlibrefedericopuy.core.getViewModel
+import com.example.federico.mlibrefedericopuy.databinding.ActivityProductListBinding
 import com.example.federico.mlibrefedericopuy.detail.ProductDetailActivity
 import com.example.federico.mlibrefedericopuy.model.ProductInfo
 import com.example.federico.mlibrefedericopuy.utils.Constants
 import kotlinx.android.synthetic.main.activity_product_list.*
+
 
 class ProductListActivity : AppCompatActivity() {
 
@@ -23,8 +22,10 @@ class ProductListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_product_list)
+        setContentView(activity_product_list)
         setSupportActionBar(toolbar)
+
+        val binding : ActivityProductListBinding = DataBindingUtil.setContentView(this, activity_product_list)
 
         viewModel = getViewModel { ProductListViewModel(ProductListRepository()) }
 
@@ -35,6 +36,8 @@ class ProductListActivity : AppCompatActivity() {
                 is ProductListState.ShowError -> showError()
             }
         })
+
+        binding.viewModel = viewModel
     }
 
     private fun renderItems(products: List<ProductInfo>) {
@@ -49,26 +52,5 @@ class ProductListActivity : AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) =
             if (isLoading) progressBar.visibility = View.VISIBLE else progressBar.visibility = View.INVISIBLE
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.options_menu, menu)
-
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menu.findItem(R.id.search).actionView as SearchView
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(componentName))
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
-            override fun onQueryTextSubmit(s: String): Boolean = false
-
-            override fun onQueryTextChange(input: String): Boolean {
-                viewModel.searchProducts(input)
-                return false
-            }
-        })
-        return true
-    }
-
-    private fun showError() = Toast.makeText(this, R.string.error, Toast.LENGTH_LONG).show()
+    private fun showError() = Toast.makeText(this, com.example.federico.mlibrefedericopuy.R.string.error, Toast.LENGTH_LONG).show()
 }
